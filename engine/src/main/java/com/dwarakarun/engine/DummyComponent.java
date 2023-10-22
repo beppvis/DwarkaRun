@@ -1,5 +1,5 @@
 
-package engine;
+package com.dwarakarun.engine;
 
 public class DummyComponent extends Component<Integer> {
 	public void init() {
