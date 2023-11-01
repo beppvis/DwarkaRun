@@ -1,6 +1,7 @@
 package com.dwarakarun.engine;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Component<T> {
 	private HashMap<String, T> data;
@@ -16,4 +17,9 @@ public class Component<T> {
 	public void set(String entityName, T comp) {
 		data.put(entityName, comp);
 	}
+
+	public Iterator iterator() {
+		return data.entrySet().iterator();
+	}
+
 }

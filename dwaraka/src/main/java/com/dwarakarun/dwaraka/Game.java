@@ -8,11 +8,22 @@ public class Game {
 	public static void main(String args[]) {
 		Engine e = new Engine();
 
-		e.addSystem("DummySystem", new DummySystem(e));
-		e.addSystem("WindowSystem", new WindowSystem(e));
+		SpriteComponent sc = new SpriteComponent();
+		e.addComponent("SpriteComponent", sc);
 
+		e.addSystem("WindowSystem", new WindowSystem(e));
+		e.addSystem("RendererSystem", new RendererSystem(e));
 
 		e.init();
+
+		String spritePath = "../assets/sprite.png";
+		Sprite s = new Sprite(spritePath);
+		s.load();
+		sc.set("testSprite", s);
+		s.scale(0.5f);
+
+		System.out.println("Done engine init");
+
 
 		e.run();
 	}

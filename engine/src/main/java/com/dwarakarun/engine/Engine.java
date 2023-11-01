@@ -13,6 +13,22 @@ public class Engine {
 	private HashMap<String, GameSystem> systems;
 	private HashMap<String, Component> components;
 
+	public <T extends GameSystem> T getSystem(String name) {
+		GameSystem sys = systems.get(name);
+		return (T)sys;
+	}
+
+	public <T> void addComponent (String name, Component<T> c) {
+		components.put(name, c);
+	}
+
+	public <T extends Component> T getComponent(String name) {
+		Component c = components.get(name);
+		return (T)c;
+	}
+
+
+
 	public Engine() {
 		if (instanceCount >= 1) {
 			throw new Error("ERROR: Attempting to launch multiple Engine instances");
@@ -30,6 +46,7 @@ public class Engine {
 		}
 		for (String dep: deps) {
 			if (!visited.contains(dep)) {
+				System.out.println("Inserting dependency " + sys);
 				insertWithDeps(dep, getSystem(dep).getDependencies(), visited);
 				visited.add(dep);
 			}
@@ -48,9 +65,15 @@ public class Engine {
 			insertWithDeps(s.getKey(), s.getValue().getDependencies(), visited);
 		}
 
-		for (String s : depsort) {
-			getSystem(s).init();
+		System.out.println(depsort);
+
+		Iterator<String> sysNames = depsort.descendingIterator();
+		GameSystem gs;
+		while (sysNames.hasNext()) {
+			gs = getSystem(sysNames.next());
+			gs.init();
 		}
+
 	}
 
 	public void end() {
@@ -58,9 +81,11 @@ public class Engine {
 	}
 
 	private void deinit() {
-		Iterator<String> sysNames = depsort.descendingIterator();
-		while (sysNames.hasNext()) {
-			getSystem(sysNames.next()).end();
+
+		GameSystem gs;
+		for (String s : depsort) {
+			gs = getSystem(s);
+			gs.end();
 		}
 	}
 
@@ -68,20 +93,8 @@ public class Engine {
 		systems.put(name, sys);
 	}
 
-	public GameSystem getSystem(String name) {
-		return systems.get(name);
-	}
-
-	public <T> void addComponent (String name, Component<T> c) {
-		components.put(name, c);
-	}
-
-	public Component getComponent(String name) {
-		return components.get(name);
-	}
-
 	public void run() {
-		WindowSystem ws = (WindowSystem)getSystem("WindowSystem");
+		WindowSystem ws = getSystem("WindowSystem");
 		while (!shouldEnd) {
 			ws.clear();
 			Iterator<HashMap.Entry<String, GameSystem>> sys= systems.entrySet().iterator();
