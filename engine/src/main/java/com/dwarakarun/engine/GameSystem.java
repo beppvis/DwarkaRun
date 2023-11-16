@@ -4,7 +4,7 @@ import java.lang.*;
 
 public class GameSystem {
 	protected Engine eng;
-	protected String[] deps;
+	protected Class[] deps;
 	public GameSystem(Engine eng) {
 		this.eng = eng;
 	}
@@ -14,10 +14,9 @@ public class GameSystem {
 	public void update() {
 		System.out.println("Base System Update!");
 	}
-	public final String[] getDependencies() {
+	public final Class[] getDependencies() {
 		return deps;
 	}
-
 	public void end() {
 		System.out.println("Base System End!");
 	}

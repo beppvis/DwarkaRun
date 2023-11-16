@@ -20,7 +20,7 @@ import static org.lwjgl.stb.STBImage.*;
 public class RendererSystem extends GameSystem {
 	public RendererSystem(Engine eng) {
 		super(eng);
-		deps = new String[] {"WindowSystem"};
+		deps = new Class[] {WindowSystem.class};
 		System.out.println("RS Constructor done");
 	}
 
@@ -36,8 +36,9 @@ public class RendererSystem extends GameSystem {
 
 		glEnable(GL_TEXTURE_2D);
 
-		spriteComponent = eng.getComponent("SpriteComponent");
-		windowSystem = eng.getSystem("WindowSystem");
+		//TODO: Fetch and render AnimatedSprite as well once done
+		spriteComponent = eng.getComponent(SpriteComponent.class);
+		windowSystem = eng.getSystem(WindowSystem.class);
 	}
 
 	private void render(Sprite sp) {

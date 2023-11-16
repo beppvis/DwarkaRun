@@ -1,33 +1,40 @@
 package com.dwarakarun.engine;
 
-import java.lang.String;
 import java.util.*;
 
 public class Engine {
 	private static int instanceCount = 0;
 
-	private Deque<String> depsort;
+	private Deque<Class> depsort;
 
 	private Boolean shouldEnd;
 
-	private HashMap<String, GameSystem> systems;
-	private HashMap<String, Component> components;
+	private HashMap<Class, GameSystem> systems;
+	private HashMap<Class, Component> components;
+	private WindowSystem ws;
 
-	public <T extends GameSystem> T getSystem(String name) {
-		GameSystem sys = systems.get(name);
+	public <T extends GameSystem> T getSystem(Class<T> cl) {
+		GameSystem sys = systems.get(cl);
 		return (T)sys;
 	}
 
-	public <T> void addComponent (String name, Component<T> c) {
-		components.put(name, c);
+	public <T extends GameSystem> void addSystem(T sys) {
+		String name = sys.getClass().getCanonicalName();
+		System.out.println("Registering system " + name);
+		systems.put(sys.getClass(), sys);
 	}
 
-	public <T extends Component> T getComponent(String name) {
-		Component c = components.get(name);
-		return (T)c;
+	public <T> void addComponent (Component<T> c) {
+		String name = c.getClass().getCanonicalName();
+		System.out.println("Registering component " + name);
+		components.put(c.getClass(), c);
 	}
 
-
+	public <T extends Component> T getComponent(Class<T> cl) {
+		String name = cl.getClass().getCanonicalName();
+		System.out.println("Getting component " + name);
+		return (T)components.get(cl);
+	}
 
 	public Engine() {
 		if (instanceCount >= 1) {
@@ -35,16 +42,16 @@ public class Engine {
 		}
 		instanceCount = 1;
 
-		systems = new HashMap<String, GameSystem>();
-		components = new HashMap<String, Component>();
+		systems = new HashMap<Class, GameSystem>();
+		components = new HashMap<Class, Component>();
 		shouldEnd = false;
 	}
 
-	private void insertWithDeps(String sys, String[] deps, Set<String> visited) {
+	private void insertWithDeps(Class sys, Class[] deps, Set<Class> visited) {
 		if (visited.contains(sys)) {
 			return;
 		}
-		for (String dep: deps) {
+		for (Class dep: deps) {
 			if (!visited.contains(dep)) {
 				System.out.println("Inserting dependency " + sys);
 				insertWithDeps(dep, getSystem(dep).getDependencies(), visited);
@@ -56,24 +63,25 @@ public class Engine {
 	}
 
 	public void init() {
-		depsort = new ArrayDeque<String>(systems.size());
-		Set<String> visited = new HashSet<String>();
+		depsort = new ArrayDeque<Class>(systems.size());
+		Set<Class> visited = new HashSet<Class>();
 
-		Iterator<HashMap.Entry<String, GameSystem>> sys= systems.entrySet().iterator();
+		Iterator<HashMap.Entry<Class, GameSystem>> sys= systems.entrySet().iterator();
 		while (sys.hasNext() && visited.size() != systems.size()) {
-			HashMap.Entry<String, GameSystem> s = sys.next();
+			HashMap.Entry<Class, GameSystem> s = sys.next();
 			insertWithDeps(s.getKey(), s.getValue().getDependencies(), visited);
 		}
 
 		System.out.println(depsort);
 
-		Iterator<String> sysNames = depsort.descendingIterator();
+		Iterator<Class> sysNames = depsort.descendingIterator();
 		GameSystem gs;
 		while (sysNames.hasNext()) {
 			gs = getSystem(sysNames.next());
 			gs.init();
 		}
 
+		ws = getSystem(WindowSystem.class);
 	}
 
 	public void end() {
@@ -83,21 +91,17 @@ public class Engine {
 	private void deinit() {
 
 		GameSystem gs;
-		for (String s : depsort) {
+		for (Class s : depsort) {
 			gs = getSystem(s);
 			gs.end();
 		}
 	}
 
-	public void addSystem(String name, GameSystem sys) {
-		systems.put(name, sys);
-	}
 
 	public void run() {
-		WindowSystem ws = getSystem("WindowSystem");
 		while (!shouldEnd) {
 			ws.clear();
-			Iterator<HashMap.Entry<String, GameSystem>> sys= systems.entrySet().iterator();
+			Iterator<HashMap.Entry<Class, GameSystem>> sys= systems.entrySet().iterator();
 			while (sys.hasNext()) {
 				sys.next().getValue().update();
 			}
@@ -106,5 +110,4 @@ public class Engine {
 		}
 		deinit();
 	}
-
 }

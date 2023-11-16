@@ -9,10 +9,10 @@ public class Game {
 		Engine e = new Engine();
 
 		SpriteComponent sc = new SpriteComponent();
-		e.addComponent("SpriteComponent", sc);
+		e.addComponent(sc);
 
-		e.addSystem("WindowSystem", new WindowSystem(e));
-		e.addSystem("RendererSystem", new RendererSystem(e));
+		e.addSystem(new WindowSystem(e));
+		e.addSystem(new RendererSystem(e));
 
 		e.init();
 

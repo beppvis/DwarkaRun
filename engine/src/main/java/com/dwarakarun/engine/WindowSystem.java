@@ -38,7 +38,7 @@ public class WindowSystem extends GameSystem {
 
 	public WindowSystem(Engine eng) {
 		super(eng);
-		deps = new String[] {};
+		deps = new Class[] {};
 		System.out.println("WS Constructor done");
 	}
 
