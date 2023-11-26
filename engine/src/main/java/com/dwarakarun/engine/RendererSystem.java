@@ -18,6 +18,7 @@ import static org.lwjgl.stb.STBImage.*;
 
 
 public class RendererSystem extends GameSystem {
+  static int sprite_count;
 	public RendererSystem(Engine eng) {
 		super(eng);
 		deps = new Class[] {WindowSystem.class};
@@ -41,7 +42,9 @@ public class RendererSystem extends GameSystem {
 		windowSystem = eng.getSystem(WindowSystem.class);
 	}
 
-	private void render(Sprite sp) {
+	protected void render(Sprite sp,int ColSprites, int currSprite) {
+    //ColSprites is no of sprites present in column of spritesheet
+    //currSprite refers to the current sprite being rendered
 		sp.bindTexture();
 		glPushMatrix();
 		//TODO: Replace with x and y coords
@@ -52,17 +55,24 @@ public class RendererSystem extends GameSystem {
 		int width = sp.getWidth();
 		int height = sp.getHeight();
 
-		glTexCoord2f(sp.getTexcoord(0, 0), 1-sp.getTexcoord(0, 1));
+    float sprite_tex_width = 1/(float)ColSprites;
+
+    float pt0 = sp.getTexcoord(0, 0);
+    float pt1 = sp.getTexcoord(0, 1);
+    float pt2 = sp.getTexcoord(1, 0);
+    float pt3 = sp.getTexcoord(1, 1);
+
+		glTexCoord2f((sprite_tex_width*currSprite), 1-pt1);
 		glVertex2f(0, 0);
 
-		glTexCoord2f(sp.getTexcoord(0, 0), 1-sp.getTexcoord(1, 1));
+		glTexCoord2f((sprite_tex_width*currSprite), 1-pt3);
 		glVertex2f(0, height);
 
-		glTexCoord2f(sp.getTexcoord(1, 0), 1-sp.getTexcoord(1, 1));
-		glVertex2f(width, height);
+		glTexCoord2f((sprite_tex_width*(currSprite+1)), 1-pt3);
+		glVertex2f(width/ColSprites, height);
 
-		glTexCoord2f(sp.getTexcoord(1, 0), 1-sp.getTexcoord(0, 1));
-		glVertex2f(width, 0);
+		glTexCoord2f((sprite_tex_width*(currSprite+1)), 1-pt1);
+		glVertex2f(width/ColSprites, 0);
 
 		glEnd();
 
@@ -71,8 +81,9 @@ public class RendererSystem extends GameSystem {
 
 	@Override 
 	public void update() {
+    /*
 		glPushMatrix();
-
+  
 		glScalef(2f/windowSystem.getWidth(), -2f/windowSystem.getHeight(), 1.0f);
 		glTranslatef(-windowSystem.getWidth()/2f, -windowSystem.getHeight()/2f, 0);
 
@@ -81,8 +92,10 @@ public class RendererSystem extends GameSystem {
 			Map.Entry entry = (Map.Entry)iter.next();
 			String name = (String)entry.getKey();
 			Sprite sprite = (Sprite)entry.getValue();
-			render(sprite);
+			render(sprite,3,sprite_count++);
+      sprite_count %= 4;
 		}
 		glPopMatrix();
+    */
 	}
 }

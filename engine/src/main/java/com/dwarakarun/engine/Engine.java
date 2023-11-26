@@ -98,11 +98,16 @@ public class Engine {
 	}
 
 
-	public void run() {
+	public void run(int sprite_time) {
 		while (!shouldEnd) {
 			ws.clear();
 			Iterator<HashMap.Entry<Class, GameSystem>> sys= systems.entrySet().iterator();
 			while (sys.hasNext()) {
+        try {
+          Thread.sleep(sprite_time);
+        } catch(Exception e) {
+          System.out.println(e);
+        }
 				sys.next().getValue().update();
 			}
 			ws.swapBuffers();

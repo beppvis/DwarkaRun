@@ -1,0 +1,13 @@
+[{
+  "path": "../assets/shinobi/Samurai/Attack_1.png",
+  "time": 90,
+  "row": 5,
+  "col": 0 
+},
+{
+  "path": "../assets/shinobi/Samurai/Attack_2.png",
+  "time": 80,
+  "row": 3,
+  "col": 0 
+}
+]
