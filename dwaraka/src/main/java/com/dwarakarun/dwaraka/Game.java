@@ -13,7 +13,6 @@ public class Game {
 
 		e.addSystem(new WindowSystem(e));
 		e.addSystem(new RendererSystem(e));
-    e.addSystem(new AnimatedSpriteSystem(e));
 
 		e.init();
 
@@ -22,7 +21,8 @@ public class Game {
     String spritePath2 = "../assets/vampire/Vampire_Girl/Attack_4.png";
     String spritePath3 = "../assets/vampire/Countess_Vampire/Attack_2.png";
     String spritePath4 = "../assets/shinobi/Samurai/Attack_2.png";
-		Sprite s = new Sprite(spritePath2);
+    String spritePath5 = "../assets/shinobi/Shinobi/Run.png";
+		Sprite s = new Sprite(spritePath5);
 		s.load();
 		sc.set("testSprite", s);
 		s.scale(1f);
@@ -31,6 +31,8 @@ public class Game {
 
 //SpriteDetails sd = new SpriteDetails(spritePath1);
 //    sd.getSpriteTime();
-		e.run(30);
+
+    AnimatorSystem as = new AnimatorSystem();
+		e.run(as.getSpriteTime());
 	}
 }

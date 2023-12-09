@@ -65,6 +65,15 @@ public class WindowSystem extends GameSystem {
 			System.out.println("NULL window");
 		}
 
+    KeySystem ks = new KeySystem();
+    glfwSetKeyCallback(handle, (handle, key, scancode, action, mods) -> {
+      if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
+        glfwSetWindowShouldClose(handle, true);
+      } else {
+        ks.moveSprite(key);
+      }
+    });
+
 		glfwMakeContextCurrent(handle);
 		glfwSwapInterval(1);
 		glfwShowWindow(handle);

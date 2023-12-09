@@ -27,12 +27,13 @@ public class RendererSystem extends GameSystem {
 
 	SpriteComponent spriteComponent;
 	WindowSystem windowSystem;
+  AnimatorSystem as = new AnimatorSystem();
 
 	@Override
 	public void init() {
 		System.out.println("RS init");
 
-		glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glLoadIdentity();
 
 		glEnable(GL_TEXTURE_2D);
@@ -42,13 +43,14 @@ public class RendererSystem extends GameSystem {
 		windowSystem = eng.getSystem(WindowSystem.class);
 	}
 
-	protected void render(Sprite sp,int ColSprites, int currSprite) {
+	protected void render(Sprite sp,int ColSprites, int currSprite, float x, int y) {
     //ColSprites is no of sprites present in column of spritesheet
     //currSprite refers to the current sprite being rendered
 		sp.bindTexture();
 		glPushMatrix();
 		//TODO: Replace with x and y coords
-		glTranslatef(100f, 200, 0);
+		//glTranslatef(100f, 200, 0);
+    glTranslatef(x,y,0);
 
 		glBegin(GL_QUADS);
 
@@ -81,7 +83,6 @@ public class RendererSystem extends GameSystem {
 
 	@Override 
 	public void update() {
-    /*
 		glPushMatrix();
   
 		glScalef(2f/windowSystem.getWidth(), -2f/windowSystem.getHeight(), 1.0f);
@@ -92,10 +93,8 @@ public class RendererSystem extends GameSystem {
 			Map.Entry entry = (Map.Entry)iter.next();
 			String name = (String)entry.getKey();
 			Sprite sprite = (Sprite)entry.getValue();
-			render(sprite,3,sprite_count++);
-      sprite_count %= 4;
+			render(sprite,as.getSprite(),as.getSpriteCount(),as.getX(),as.getY());
 		}
 		glPopMatrix();
-    */
 	}
 }
