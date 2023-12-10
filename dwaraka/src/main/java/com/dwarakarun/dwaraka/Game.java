@@ -11,6 +11,9 @@ public class Game {
 		SpriteComponent sc = new SpriteComponent();
 		e.addComponent(sc);
 
+		TransformComponent tc = new TransformComponent();
+		e.addComponent(tc);
+
 		e.addSystem(new WindowSystem(e));
 		e.addSystem(new RendererSystem(e));
 
@@ -50,7 +53,6 @@ public class Game {
     AnimatorSystem as = new AnimatorSystem(); 
     
     e.run(as.getSpriteTime("shinobiSprite"));
-
   }
 }
 

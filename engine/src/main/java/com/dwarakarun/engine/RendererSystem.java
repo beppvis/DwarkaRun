@@ -26,6 +26,7 @@ public class RendererSystem extends GameSystem {
 	}
 
 	SpriteComponent spriteComponent;
+	TransformComponent transformComponent;
 	WindowSystem windowSystem;
   AnimatorSystem as = new AnimatorSystem();
 
@@ -41,16 +42,19 @@ public class RendererSystem extends GameSystem {
 		//TODO: Fetch and render AnimatedSprite as well once done
 		spriteComponent = eng.getComponent(SpriteComponent.class);
 		windowSystem = eng.getSystem(WindowSystem.class);
+		transformComponent = eng.getComponent(TransformComponent.class);
+		System.out.println(transformComponent);
 	}
 
-	protected void render(Sprite sp,int ColSprites, int currSprite, float x, int y) {
+	protected void render(Sprite sp,int ColSprites, int currSprite, 
+			float x, float y, float z) {
     //ColSprites is no of sprites present in column of spritesheet
     //currSprite refers to the current sprite being rendered
 		sp.bindTexture();
 		glPushMatrix();
 		//TODO: Replace with x and y coords
 		//glTranslatef(100f, 200, 0);
-    glTranslatef(x,y,0);
+	    glTranslatef(x, y, z);
 
 		glBegin(GL_QUADS);
 
@@ -93,7 +97,12 @@ public class RendererSystem extends GameSystem {
 			Map.Entry entry = (Map.Entry)iter.next();
 			String name = (String)entry.getKey();
 			Sprite sprite = (Sprite)entry.getValue();
-      render(sprite,as.getSprite(name),as.getSpriteCount(name),as.getX(name),as.getY(name));
+			Transform t = transformComponent.get(name);
+			try {
+				render(sprite,as.getSprite(name),as.getSpriteCount(name),t.getX(),t.getY(), t.getZ());
+			} catch (Exception e) {
+				System.out.println("ERROR: Could not render sprite, missing transform component: " + name);
+			}
 		}
 		glPopMatrix();
 	}
