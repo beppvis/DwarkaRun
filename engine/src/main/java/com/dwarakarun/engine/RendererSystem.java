@@ -93,7 +93,7 @@ public class RendererSystem extends GameSystem {
 			Map.Entry entry = (Map.Entry)iter.next();
 			String name = (String)entry.getKey();
 			Sprite sprite = (Sprite)entry.getValue();
-			render(sprite,as.getSprite(),as.getSpriteCount(),as.getX(),as.getY());
+      render(sprite,as.getSprite(name),as.getSpriteCount(name),as.getX(name),as.getY(name));
 		}
 		glPopMatrix();
 	}

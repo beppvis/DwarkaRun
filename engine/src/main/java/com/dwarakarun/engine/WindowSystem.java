@@ -70,7 +70,10 @@ public class WindowSystem extends GameSystem {
       if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
         glfwSetWindowShouldClose(handle, true);
       } else {
-        ks.moveSprite(key);
+        if( action == GLFW_REPEAT && (key == 65 || key == 68))
+          ks.moveSprite(key);
+        else if( action == GLFW_PRESS && (key==87 || key==83))
+          ks.moveSprite(key);
       }
     });
 

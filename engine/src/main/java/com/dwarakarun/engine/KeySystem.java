@@ -35,22 +35,22 @@ public class KeySystem {
     //83 = s
     //68 = d
     if(keycode == 65) {
-      x = as.getX();
+      x = as.getX("shinobiSprite");
       x -= 8;
       System.out.println("A "+x);
       as.changeX(x);
     } else if(keycode == 87) {
-      y = as.getY();
+      y = as.getY("shinobiSprite");
       y -= 50;
       System.out.println("W "+y);
       as.changeY(y);
     } else if(keycode == 83) {
-      y = as.getY();
+      y = as.getY("shinobiSprite");
       y += 50;
       System.out.println("S "+y);
       as.changeY(y);
     } else if(keycode == 68) {
-      x = as.getX();
+      x = as.getX("shinobiSprite");
       x += 8;
       System.out.println("D "+x);
       as.changeX(x);
