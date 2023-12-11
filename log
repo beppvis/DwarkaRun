@@ -1,0 +1,33 @@
+> Task :engine:compileJava
+> Task :dwaraka:compileJava UP-TO-DATE
+> Task :dwaraka:processResources NO-SOURCE
+> Task :dwaraka:classes UP-TO-DATE
+> Task :engine:processResources NO-SOURCE
+> Task :engine:classes
+> Task :engine:jar UP-TO-DATE
+
+> Task :dwaraka:run
+Registering component com.dwarakarun.engine.SpriteComponent
+WS Constructor done
+Registering system com.dwarakarun.engine.WindowSystem
+RS Constructor done
+Registering system com.dwarakarun.engine.RendererSystem
+RS Constructor done
+AnimatedSprite Constructor Done
+Registering system com.dwarakarun.engine.AnimatedSpriteSystem
+Inserting dependency class com.dwarakarun.engine.AnimatedSpriteSystem
+Inserting dependency class com.dwarakarun.engine.AnimatedSpriteSystem
+[class com.dwarakarun.engine.AnimatedSpriteSystem, class com.dwarakarun.engine.RendererSystem, class com.dwarakarun.engine.WindowSystem]
+WS init
+RS init
+Getting component java.lang.Class
+RS init
+Getting component java.lang.Class
+Loaded texture file ../assets/shinobi/Samurai/Attack_2.png
+Width: 512 Height: 128 Channels: 4
+Done engine init
+Base System End!
+Base System End!
+
+BUILD SUCCESSFUL in 2s
+4 actionable tasks: 2 executed, 2 up-to-date

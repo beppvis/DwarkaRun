@@ -78,7 +78,8 @@ public class Engine {
 		GameSystem gs;
 		while (sysNames.hasNext()) {
 			gs = getSystem(sysNames.next());
-			gs.init();
+      String sys_name = gs.getClass().getCanonicalName();
+      gs.init();
 		}
 
 		ws = getSystem(WindowSystem.class);

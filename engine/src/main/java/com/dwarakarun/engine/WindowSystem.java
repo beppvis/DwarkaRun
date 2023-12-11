@@ -27,6 +27,7 @@ public class WindowSystem extends GameSystem {
 	private int width;
 	private int height;
 	Texture texture;
+  AnimatorSystem as;
 
 	private void handleErrors() {
 		int err = glGetError();
@@ -57,13 +58,28 @@ public class WindowSystem extends GameSystem {
 		}
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-		width = 800;
-		height = 600;
+		width = 1200;
+		height = 780;
 
 		handle = glfwCreateWindow(width, height, "Dwaraka Run", NULL, NULL);
 		if (handle == NULL) {
 			System.out.println("NULL window");
 		}
+
+    KeySystem ks = new KeySystem();
+    as = eng.getSystem(AnimatorSystem.class);
+    glfwSetKeyCallback(handle, (handle, key, scancode, action, mods) -> {
+      if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
+        glfwSetWindowShouldClose(handle, true);
+      } else {
+        if( (action == GLFW_REPEAT || action == GLFW_PRESS) && (key == 65 || key == 68 || key == 87 || key == 83))
+          ks.moveSprite(key,2f);
+
+        if(action == GLFW_RELEASE && (key == 65 || key == 68 || key == 87 || key == 83)) {
+          ks.moveSprite(key,0f);
+        }
+      }
+    });
 
 		glfwMakeContextCurrent(handle);
 		glfwSwapInterval(1);

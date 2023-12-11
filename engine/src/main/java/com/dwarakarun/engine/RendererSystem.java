@@ -16,8 +16,21 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 import static org.lwjgl.stb.STBImage.*;
 
+class RenderData {
+	public Sprite s;
+	public Transform t;
+	public String name;
+
+	public RenderData(String name, Sprite s, Transform t) {
+		this.s = s;
+		this.t = t;
+		this.name = name;
+	}
+}
+
 
 public class RendererSystem extends GameSystem {
+  static int sprite_count;
 	public RendererSystem(Engine eng) {
 		super(eng);
 		deps = new Class[] {WindowSystem.class};
@@ -25,44 +38,63 @@ public class RendererSystem extends GameSystem {
 	}
 
 	SpriteComponent spriteComponent;
+	TransformComponent transformComponent;
 	WindowSystem windowSystem;
+  AnimatorSystem as;
+  SpriteDetails sd = new SpriteDetails();
 
 	@Override
 	public void init() {
 		System.out.println("RS init");
 
-		glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glLoadIdentity();
 
 		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
 
 		//TODO: Fetch and render AnimatedSprite as well once done
 		spriteComponent = eng.getComponent(SpriteComponent.class);
 		windowSystem = eng.getSystem(WindowSystem.class);
+    as = eng.getSystem(AnimatorSystem.class); 
+		transformComponent = eng.getComponent(TransformComponent.class);
+		System.out.println(transformComponent);
 	}
 
-	private void render(Sprite sp) {
+	protected void render(Sprite sp,int ColSprites, int currSprite, 
+			float x, float y) {
+    //ColSprites is no of sprites present in column of spritesheet
+    //currSprite refers to the current sprite being rendered
 		sp.bindTexture();
 		glPushMatrix();
 		//TODO: Replace with x and y coords
-		glTranslatef(100f, 200, 0);
+		//glTranslatef(100f, 200, 0);
+	    glTranslatef(x, y, 0);
 
 		glBegin(GL_QUADS);
 
 		int width = sp.getWidth();
 		int height = sp.getHeight();
 
-		glTexCoord2f(sp.getTexcoord(0, 0), 1-sp.getTexcoord(0, 1));
+    float sprite_tex_width = 1/(float)ColSprites;
+
+    float pt0 = sp.getTexcoord(0, 0);
+    float pt1 = sp.getTexcoord(0, 1);
+    float pt2 = sp.getTexcoord(1, 0);
+    float pt3 = sp.getTexcoord(1, 1);
+
+		glTexCoord2f((sprite_tex_width*currSprite), 1-pt1);
 		glVertex2f(0, 0);
 
-		glTexCoord2f(sp.getTexcoord(0, 0), 1-sp.getTexcoord(1, 1));
+		glTexCoord2f((sprite_tex_width*currSprite), 1-pt3);
 		glVertex2f(0, height);
 
-		glTexCoord2f(sp.getTexcoord(1, 0), 1-sp.getTexcoord(1, 1));
-		glVertex2f(width, height);
+		glTexCoord2f((sprite_tex_width*(currSprite+1)), 1-pt3);
+		glVertex2f(width/ColSprites, height);
 
-		glTexCoord2f(sp.getTexcoord(1, 0), 1-sp.getTexcoord(0, 1));
-		glVertex2f(width, 0);
+		glTexCoord2f((sprite_tex_width*(currSprite+1)), 1-pt1);
+		glVertex2f(width/ColSprites, 0);
 
 		glEnd();
 
@@ -72,16 +104,35 @@ public class RendererSystem extends GameSystem {
 	@Override 
 	public void update() {
 		glPushMatrix();
-
+  
 		glScalef(2f/windowSystem.getWidth(), -2f/windowSystem.getHeight(), 1.0f);
 		glTranslatef(-windowSystem.getWidth()/2f, -windowSystem.getHeight()/2f, 0);
 
+		LinkedList<RenderData> spriteOrder = new LinkedList<RenderData>();
 		Iterator iter = spriteComponent.iterator();
 		while (iter.hasNext()) {
 			Map.Entry entry = (Map.Entry)iter.next();
 			String name = (String)entry.getKey();
 			Sprite sprite = (Sprite)entry.getValue();
-			render(sprite);
+			Transform t = transformComponent.get(name);
+			RenderData data = new RenderData(name, sprite, t);
+			if (t.getZ() == 0) {
+				spriteOrder.addFirst(data);
+			} else {
+				spriteOrder.addLast(data);
+			}
+		}
+		RenderData cur;
+		while (spriteOrder.size() != 0) {
+			cur = spriteOrder.removeFirst();
+			String name = cur.name;
+			Sprite sp = cur.s;
+			Transform tr = cur.t;
+			try {
+				render(sp, sd.getSpriteQuant(name), sd.getCurrSprite(name), tr.getX(), tr.getY());
+			} catch (Exception e) {
+				System.out.println("ERROR: Could not render sprite, missing transform component: " + name);
+			}
 		}
 		glPopMatrix();
 	}
