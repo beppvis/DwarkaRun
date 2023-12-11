@@ -65,15 +65,15 @@ public class WindowSystem extends GameSystem {
 			System.out.println("NULL window");
 		}
 
-    KeySystem ks = new KeySystem();
+    //KeySystem ks = new KeySystem();
     glfwSetKeyCallback(handle, (handle, key, scancode, action, mods) -> {
       if(key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE ) {
         glfwSetWindowShouldClose(handle, true);
       } else {
-        if( action == GLFW_REPEAT && (key == 65 || key == 68))
-          ks.moveSprite(key);
-        else if( action == GLFW_PRESS && (key==87 || key==83))
-          ks.moveSprite(key);
+        //if( action == GLFW_REPEAT && (key == 65 || key == 68))
+          //ks.moveSprite(key);
+        //else if( action == GLFW_PRESS && (key==87 || key==83))
+          //ks.moveSprite(key);
       }
     });
 

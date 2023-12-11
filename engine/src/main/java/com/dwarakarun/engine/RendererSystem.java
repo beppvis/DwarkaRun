@@ -28,7 +28,8 @@ public class RendererSystem extends GameSystem {
 	SpriteComponent spriteComponent;
 	TransformComponent transformComponent;
 	WindowSystem windowSystem;
-  AnimatorSystem as = new AnimatorSystem();
+  AnimatorSystem as;
+  SpriteDetails sd = new SpriteDetails();
 
 	@Override
 	public void init() {
@@ -38,10 +39,12 @@ public class RendererSystem extends GameSystem {
 		glLoadIdentity();
 
 		glEnable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH_TEST);
 
 		//TODO: Fetch and render AnimatedSprite as well once done
 		spriteComponent = eng.getComponent(SpriteComponent.class);
 		windowSystem = eng.getSystem(WindowSystem.class);
+    as = eng.getSystem(AnimatorSystem.class); 
 		transformComponent = eng.getComponent(TransformComponent.class);
 		System.out.println(transformComponent);
 	}
@@ -99,7 +102,7 @@ public class RendererSystem extends GameSystem {
 			Sprite sprite = (Sprite)entry.getValue();
 			Transform t = transformComponent.get(name);
 			try {
-				render(sprite,as.getSprite(name),as.getSpriteCount(name),t.getX(),t.getY(), t.getZ());
+				render(sprite,sd.getSpriteQuant(name),sd.getCurrSprite(name),t.getX(),t.getY(), t.getZ());
 			} catch (Exception e) {
 				System.out.println("ERROR: Could not render sprite, missing transform component: " + name);
 			}

@@ -22,11 +22,13 @@ import java.io.*;
 import javax.imageio.*;
 
 public class KeySystem {
-  public KeySystem() {
+  Transform ts;
+  
+  public KeySystem(Transform ts) {
     System.out.println("Keysystem Constructor Done");
+    this.ts = ts;
   }
 
-  AnimatorSystem as = new AnimatorSystem();
   static int x,y,time;
 
   void moveSprite(int keycode) {
@@ -35,25 +37,13 @@ public class KeySystem {
     //83 = s
     //68 = d
     if(keycode == 65) {
-      x = as.getX("shinobiSprite");
-      x -= 8;
-      System.out.println("A "+x);
-      as.changeX(x);
+      ts.setX(ts.getX()-8f);
     } else if(keycode == 87) {
-      y = as.getY("shinobiSprite");
-      y -= 50;
-      System.out.println("W "+y);
-      as.changeY(y);
+      ts.setY(ts.getY()-50f);
     } else if(keycode == 83) {
-      y = as.getY("shinobiSprite");
-      y += 50;
-      System.out.println("S "+y);
-      as.changeY(y);
+      ts.setY(ts.getY()+50f);
     } else if(keycode == 68) {
-      x = as.getX("shinobiSprite");
-      x += 8;
-      System.out.println("D "+x);
-      as.changeX(x);
+      ts.setX(ts.getX()+8f);
     }
   }
 }

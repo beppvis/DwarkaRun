@@ -16,6 +16,7 @@ public class Game {
 
 		e.addSystem(new WindowSystem(e));
 		e.addSystem(new RendererSystem(e));
+    e.addSystem(new AnimatorSystem(e));
 
 		e.init();
 
@@ -33,15 +34,21 @@ public class Game {
     Sprite s2 = new Sprite(spritePath3);
     Sprite s3 = new Sprite(background);
 
-		//s.load();
+    Transform t1 = new Transform(0,0,-0.5f);
+    tc.set("background",t1);
+
+    Transform t2 = new Transform(0,0,0.5f);
+    tc.set("shinobiSprite",t2);
+
+		s.load();
     //s2.load();
     s3.load();
 
-		//sc.set("shinobiSprite", s);
+		sc.set("shinobiSprite", s);
     //sc.set("vampSprite", s2);
-    sc.set("background",s3);
+    //sc.set("background",s3);
 
-		//s.scale(1f);
+		s.scale(1f);
     //s2.scale(2f);
     s3.scale(2.8f);
 
@@ -50,9 +57,7 @@ public class Game {
 //SpriteDetails sd = new SpriteDetails(spritePath1);
 //    sd.getSpriteTime();
 
-    AnimatorSystem as = new AnimatorSystem(); 
-    
-    e.run(as.getSpriteTime("shinobiSprite"));
+    e.run();
   }
 }
 
