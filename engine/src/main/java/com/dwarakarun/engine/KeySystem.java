@@ -24,26 +24,56 @@ import javax.imageio.*;
 public class KeySystem {
   Transform ts;
   
-  public KeySystem(Transform ts) {
+  public KeySystem() {
     System.out.println("Keysystem Constructor Done");
-    this.ts = ts;
   }
 
-  static int x,y,time;
-
-  void moveSprite(int keycode) {
+  static float pos[] = {0f,0f};
+  static float back[] = {0f, 0f};
+  void moveSprite(int keycode,float move_speed) {
     //65 = a
     //87 = w
     //83 = s
     //68 = d
     if(keycode == 65) {
-      ts.setX(ts.getX()-8f);
+      System.out.println("Move speed"+move_speed);
+      pos[0] = -move_speed;
     } else if(keycode == 87) {
-      ts.setY(ts.getY()-50f);
+      pos[1]= -move_speed;
     } else if(keycode == 83) {
-      ts.setY(ts.getY()+50f);
+      pos[1] = move_speed;
     } else if(keycode == 68) {
-      ts.setX(ts.getX()+8f);
+      pos[0] = move_speed;
     }
+  }
+
+  void moveBackground() {
+    back[0] = -2f;
+  }
+
+  float getXMove(String name) {
+    if(name=="shinobiSprite") {
+      return pos[0];
+    } else {
+      return back[0];
+    }
+  }
+
+  float getYMove(String name) {
+    if(name=="shinobiSprite") {
+      return pos[1];
+    } else {
+      return back[1];
+    }
+  }
+
+  void noMove() {
+    pos[0] = 0;
+    pos[1] = 0;
+  }
+
+  void noMoveBack() {
+    back[0] = 0;
+    back[1] = 0;
   }
 }

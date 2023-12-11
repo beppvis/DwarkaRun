@@ -28,29 +28,41 @@ public class Game {
     String spritePath5 = "../assets/shinobi/Shinobi/Run.png";
 
     String background = "../assets/background.jpg";
+    String background_for = "../assets/background_forest.jpg";
+    String background_for_dup = "../assets/background_forest.jpg";
 
 
 		Sprite s = new Sprite(spritePath5);
     Sprite s2 = new Sprite(spritePath3);
-    Sprite s3 = new Sprite(background);
+    Sprite s3 = new Sprite(background_for);
+    Sprite s3_dup = new Sprite(background_for_dup);
 
-    Transform t1 = new Transform(0,0,0);
-    tc.set("background",t1);
+    Transform t1 = new Transform(0,10,0);
+    tc.set("background_for",t1);
 
-    Transform t2 = new Transform(0,0,1);
+    Transform t2 = new Transform(100,450,1);
     tc.set("shinobiSprite",t2);
 
+    Transform t3 = new Transform(10,450,1);
+    tc.set("vampSprite",t3);
+
+    Transform t1_dup = new Transform(0,10,0);
+    tc.set("background_for_dup",t1_dup);
+
 		s.load();
-    //s2.load();
+    s2.load();
     s3.load();
+    s3_dup.load();
 
 		sc.set("shinobiSprite", s);
-    //sc.set("vampSprite", s2);
-    sc.set("background",s3);
+    sc.set("vampSprite", s2);
+    sc.set("background_for",s3);
+    sc.set("background_for_dup",s3_dup);
 
 		s.scale(1f);
-    //s2.scale(2f);
-    s3.scale(2.8f);
+    s2.scale(1f);
+    s3.scale(3f);
+    s3_dup.scale(3f);
 
 		System.out.println("Done engine init");
 
