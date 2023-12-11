@@ -1,8 +1,9 @@
 package com.dwarakarun.engine;
 
 public class Transform {
-	private float x, y, z;
-	public Transform(float x, float y, float z) {
+	private float x, y;
+	private int z;
+	public Transform(float x, float y, int z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -13,7 +14,7 @@ public class Transform {
 	public float getY() {
 		return y;
 	}
-	public float getZ() {
+	public int getZ() {
 		return z;
 	}
 	public void setX(float v) {
@@ -22,7 +23,7 @@ public class Transform {
 	public void setY(float v) {
 		y = v;
 	}
-	public void setZ(float v) {
+	public void setZ(int v) {
 		z = v;
 	}
 }

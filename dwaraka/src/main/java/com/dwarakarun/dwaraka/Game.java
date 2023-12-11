@@ -34,10 +34,10 @@ public class Game {
     Sprite s2 = new Sprite(spritePath3);
     Sprite s3 = new Sprite(background);
 
-    Transform t1 = new Transform(0,0,-0.5f);
+    Transform t1 = new Transform(0,0,0);
     tc.set("background",t1);
 
-    Transform t2 = new Transform(0,0,0.5f);
+    Transform t2 = new Transform(0,0,1);
     tc.set("shinobiSprite",t2);
 
 		s.load();
@@ -46,7 +46,7 @@ public class Game {
 
 		sc.set("shinobiSprite", s);
     //sc.set("vampSprite", s2);
-    //sc.set("background",s3);
+    sc.set("background",s3);
 
 		s.scale(1f);
     //s2.scale(2f);
