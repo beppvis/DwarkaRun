@@ -5,3 +5,9 @@ build/
 
 # Ignore Gradle build output directory
 build
+
+# Ignore Intellij idea configs
+.idea
+# Ignore binaries
+dwaraka/bin
+engine/bin
